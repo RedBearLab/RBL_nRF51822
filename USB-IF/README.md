@@ -1,20 +1,16 @@
-# MK20 USB Interface
+# USB Interface
 
+## Interface Chip
 
-## PCB Version
+The interface chip used on the RBL_nRF51822 board is Freescale MK20 and it provides an USB port for uploading host firmware to the target chip (i.e. the nRF51822 SoC).
 
-### V1.0
+## New Interface Firmwre - DAPLink
 
-For V1.0 version of the MK20 USB dongle, you can update it to the latest interface firmware called DAPLink which is supported and developed by ARM mbed.
+ARM mbed has changed the interface firmware from CMSIS-DAP to DAPLink, it has all features as the CMSIS-DAP. Note that for the DAPLINK, the drag-and-drop drive is called `DAPLINK` instead of `MBED`.
 
-### V1.5
-
-For V1.5, you can only use the CMSIS-DAP firmware.
-
-
-## Update Interface Firmware
+## Updating Interface Firmware
  
-In case you have changed the USB interface firmware inside the MK20 chip and want to restore to default one or upgrade to lastest version, follow the steps below:
+In case you have changed the USB interface firmware inside the MK20 interface chip and want to restore to default one or upgrade to lastest version, follow the steps below:
 
 1. Press and hold the reset button on your nRF51822 board 
 
@@ -22,25 +18,28 @@ In case you have changed the USB interface firmware inside the MK20 chip and wan
 
 3. Release the button and the LED will keep flashing (slowly) 
 
-4.1 For Windows, just drag the firmware (.bin) to the MSD drive (e.g. E:), labelled 'BOOTLOADER'
+4. Follow the following to update the firmware
 
-4.2 For Linux or Mac OSX (10.9.x), use the follow command from the Terminal:
+	4.1 For Windows, just drag the firmware (DAPLink_MK20_RBL_nRF51822.bin) to the MSD drive (e.g. E:), labelled 'BOOTLOADER'
 
-    Usage:
-	dd if=src_firmware.bin of=/Volumes/BOOTLOADER/dst_firmware.bin conv=notrunc
+	4.2 For Linux or Mac OSX (10.9.x), use the follow command from the Terminal:
 
-    Example:
-	dd if=BLENano_MK20.bin of=/Volumes/BOOTLOADER/BLENano_MK20.bin conv=notrunc
+    	Usage:
+		$ dd if=src_firmware.bin of=/Volumes/BOOTLOADER/dst_firmware.bin conv=notrunc
 
-4.3 For Mac OSX (10.10.x / 10.11.x):
+    	Example:
+		$ dd if=DAPLink_MK20_RBL_nRF51822.bin of=/Volumes/BOOTLOADER/DAPLink_MK20_RBL_nRF51822.bin conv=notrunc
 
-    sudo mount -u -w -o sync /Volumes/BOOTLOADER; cp -X ~/Desktop/BLENano_MK20.bin /Volumes/BOOTLOADER/
+	4.3 For Mac OSX (10.10.x / 10.11.x or above):
 
-Note: Use RBL_nRF51822_MK20.bin for the RBL nRF51822 board and use BLENano_MK20.bin for the BLE Nano board
+    	sudo mount -u -w -o sync /Volumes/BOOTLOADER; cp -X ~/Desktop/DAPLink_MK20_RBL_nRF51822.bin /Volumes/BOOTLOADER/
 
 5. After that, the LED should keep flashing (very fast this time) 
 
 6. Remove the board from the USB port 
 
-7. Reconnect it to the USB port, your OS will show a drive labelled 'MBED'
+7. Reconnect it to the USB port, your OS will show a drive labelled 'DAPLINK'
 
+8. Now, you can drag the [test](../Test) firmware to the DAPLink drive to test. 
+ 
+9. Note that the DAPLink will not reset the target chip by default, press the `RESET` button to allow the target to run the uploaded firmware, you can change this by sending MSD commands to the DAPLink drive, for the details about the DAPLink automation, please refer to the [MSD Commands](https://github.com/mbedmicro/DAPLink/blob/master/docs/MSD_COMMANDS.md).
